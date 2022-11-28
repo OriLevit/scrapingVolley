@@ -4,11 +4,12 @@ from bs4 import BeautifulSoup
 
 house1 = urlopen('https://www.iva.org.il/league.asp?LeagueId=2094&cYear=2023&lang=')
 house2 = urlopen('https://www.iva.org.il/league.asp?LeagueId=2095&cYear=2023')
+rubi = urlopen('https://www.iva.org.il/league.asp?LeagueId=2067&cYear=2023&lang=')
 
 
 def get_teams(link):
     soup = BeautifulSoup(link, "html.parser")
-    list_items = soup.find_all("tr")
+    list_items = soup.find("div",{"class":"legue-table"}).find_all("tr")
     teams = []
     for team in list_items[1:]:
         team_name = team.findNext("td", {"class": "sticky-col"}).findNext("a").text
@@ -28,8 +29,10 @@ def print_teams(teams_list):
         print(f"   {team['name']}          |        {team['score']}")
 
 
-team1 = get_teams(house1)[:8]
-team2 = get_teams(house2)[:8]
+team1 = get_teams(house1)
+team2 = get_teams(house2)
+
+rubi = get_teams(rubi)
 
 joined_teams = team1 + team2
 joined_teams.sort(key=operator.itemgetter('score'), reverse=True)
