@@ -1,6 +1,7 @@
 from urllib.request import urlopen
 import soup_manager
 from tqdm import tqdm
+import helper
 
 league_table = urlopen('https://www.iva.org.il/boards.asp')
 
@@ -8,10 +9,14 @@ all_leagues_links = soup_manager.get_leagues(league_table)
 all_teams = []
 all_games = []
 
-for link in tqdm(all_leagues_links, bar_format='{l_bar}{bar:100}', desc="Gathering teams", leave=False, disable=True):
+for link in tqdm(all_leagues_links, bar_format='{l_bar}{bar:100}', desc="Gathering information", leave=False,
+                 disable=False):
     league_title = soup_manager.get_title(urlopen(link))
     soup_manager.get_teams(urlopen(link), all_teams)
-    league_games = []
-    soup_manager.get_upcoming_games(urlopen(link), league_games)
-    soup_manager.get_upcoming_games(urlopen(link), all_games)
-    print(soup_manager.print_games(league_games,league_title))
+    helper.get_games(link, league_title, all_games)
+
+helper.print_teams(all_teams)
+# helper.print_games(all_games[0]["games"],all_games[0]["title"])
+
+for _ in range(len(all_games)):
+    helper.print_games(all_games[_]["games"], all_games[_]["title"])

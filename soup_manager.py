@@ -71,12 +71,11 @@ def print_teams(teams_list: list):
 
 
 def print_games(games_list: list, league):
-    games_list.sort(key=operator.itemgetter('date'))
     t = PrettyTable(["תאריך", "קבוצה ראשונה", "קבוצה שנייה", "שעה", "אולם"])
     t.title = f"משחקים ליגה {league}"
     for game in games_list:
         t.add_row([game["date"], game["first_team"], game["second_team"], game["time"], game["venue"]])
-    return(t)
+    print(t)
 
 
 def get_teams_sorted(league_table):
