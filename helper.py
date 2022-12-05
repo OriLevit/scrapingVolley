@@ -1,6 +1,5 @@
 import operator
 from urllib.request import urlopen
-
 from prettytable import PrettyTable
 import soup_manager
 from tqdm import tqdm
