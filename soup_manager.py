@@ -17,6 +17,12 @@ def get_leagues(link):
     return leagues
 
 
+def get_title(link):
+    soup = BeautifulSoup(link, "html.parser")
+    title = soup.find("div", {"class": "texts"}).findNext("h1").text
+    return title
+
+
 def get_teams(link, team_list: list):
     soup = BeautifulSoup(link, "html.parser")
     list_items = soup.find("div", {"class": "legue-table"}).find_all("tr")
@@ -64,9 +70,10 @@ def print_teams(teams_list: list):
     print(t)
 
 
-def print_games(games_list: list):
+def print_games(games_list: list, league):
     games_list.sort(key=operator.itemgetter('date'))
     t = PrettyTable(["תאריך", "קבוצה ראשונה", "קבוצה שנייה", "שעה", "אולם"])
+    t.title = f"משחקים ליגה {league}"
     for game in games_list:
         t.add_row([game["date"], game["first_team"], game["second_team"], game["time"], game["venue"]])
     print(t)
