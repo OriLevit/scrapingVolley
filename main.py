@@ -1,39 +1,14 @@
-import operator
 from urllib.request import urlopen
-from bs4 import BeautifulSoup
+import soup_manager
+from tqdm import tqdm
 
-house1 = urlopen('https://www.iva.org.il/league.asp?LeagueId=2094&cYear=2023&lang=')
-house2 = urlopen('https://www.iva.org.il/league.asp?LeagueId=2095&cYear=2023')
-rubi = urlopen('https://www.iva.org.il/league.asp?LeagueId=2067&cYear=2023&lang=')
+league_table = urlopen('https://www.iva.org.il/boards.asp')
 
+all_leagues_links = soup_manager.get_leagues(league_table)
+all_teams = []
 
-def get_teams(link):
-    soup = BeautifulSoup(link, "html.parser")
-    list_items = soup.find("div",{"class":"legue-table"}).find_all("tr")
-    teams = []
-    for team in list_items[1:]:
-        team_name = team.findNext("td", {"class": "sticky-col"}).findNext("a").text
-        info = team.findAll()
-        team_formate = {
-            "name": team_name[4:len(team_name)],
-            "score": info[-1].text
-        }
-        teams.append(team_formate)
-    return teams
+for link in tqdm(all_leagues_links, bar_format='{l_bar}{bar:100}', desc="Gathering teams"):
+    soup_manager.get_teams(link, all_teams)
 
+soup_manager.print_teams(all_teams)
 
-def print_teams(teams_list):
-    print("קבוצה                   |     נקודות  ")
-    print("_________________________________________________")
-    for team in teams_list:
-        print(f"   {team['name']}          |        {team['score']}")
-
-
-team1 = get_teams(house1)
-team2 = get_teams(house2)
-
-rubi = get_teams(rubi)
-
-joined_teams = team1 + team2
-joined_teams.sort(key=operator.itemgetter('score'), reverse=True)
-print_teams(joined_teams)
