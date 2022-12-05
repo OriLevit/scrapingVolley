@@ -76,7 +76,7 @@ def print_games(games_list: list, league):
     t.title = f"משחקים ליגה {league}"
     for game in games_list:
         t.add_row([game["date"], game["first_team"], game["second_team"], game["time"], game["venue"]])
-    print(t)
+    return(t)
 
 
 def get_teams_sorted(league_table):
