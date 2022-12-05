@@ -82,6 +82,6 @@ def get_teams_sorted(league_table):
     all_leagues_links = get_leagues(league_table)
     all_teams = []
 
-    for link in tqdm(all_leagues_links, bar_format='{l_bar}{bar:100}', desc="Gathering teams"):
+    for link in all_leagues_links:
         get_teams(link, all_teams)
         return all_teams

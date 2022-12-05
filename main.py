@@ -13,5 +13,3 @@ for link in tqdm(all_leagues_links, bar_format='{l_bar}{bar:100}', desc="Gatheri
     league_title = soup_manager.get_title(urlopen(link))
     soup_manager.get_teams(urlopen(link), all_teams)
     helper.get_games(link, league_title, all_games)
-
-
